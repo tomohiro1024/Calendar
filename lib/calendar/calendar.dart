@@ -26,7 +26,7 @@ class _CalendarState extends State<Calendar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${DateFormat('2022年 M月').format(_now)}'),
+        title: Text('${DateFormat('yyyy年 M月').format(_now)}'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -59,6 +59,9 @@ class _CalendarState extends State<Calendar> {
     List<Widget> _list = [];
     List<Widget> _listCathe = [];
 
+    // 現在の月の1日
+    DateTime _date = DateTime(_now.year, _now.month, 1);
+
     // 現在の時刻の月を来月の1日から1日引いた数を最終日と設定する
     int monthLastNumbar =
         DateTime(_now.year, _now.month + 1, 1).add(Duration(days: -1)).day;
@@ -75,28 +78,34 @@ class _CalendarState extends State<Calendar> {
           ),
         ),
       );
-      // iが7以降の場合は2列目にリストを表示
-      if (i % 7 == 6) {
+      // iの数字が日曜日だった場合改行(改行の分岐)またはiが最後の日だった場合
+      if (_date.add(Duration(days: i)).weekday == 7 ||
+          i == monthLastNumbar - 1) {
+        int repeatNumber = 7 - _listCathe.length;
+        // 一番最後の日、iが改行の数字(7桁の数字)ではない途中の数字でもリストを表示(コンテナで空白を埋める)
+        // 一番最初の日が月曜日以外だった場合コンテナで埋める
+        if (i == monthLastNumbar - 1) {
+          for (int j = 0; j < repeatNumber; j++) {
+            _listCathe.add(Expanded(
+              child: Container(),
+            ));
+          }
+        } else if (i < 7) {
+          for (int j = 0; j < repeatNumber; j++) {
+            _listCathe.insert(
+                0,
+                Expanded(
+                  child: Container(),
+                ));
+          }
+        }
+
         _list.add(
           Row(
             children: _listCathe,
           ),
         );
         _listCathe = [];
-      }
-      // iが改行の数字(6)ではない途中の数字でもリストを表示
-      if (i == monthLastNumbar - 1) {
-        int repeatNumber = 7 - _listCathe.length;
-        for (int j = 0; j < repeatNumber; j++) {
-          _listCathe.add(Expanded(
-            child: Container(),
-          ));
-        }
-        _list.add(
-          Row(
-            children: _listCathe,
-          ),
-        );
       }
     }
 
