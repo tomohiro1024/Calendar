@@ -49,7 +49,7 @@ class _CalendarState extends State<Calendar> {
                   .toList(),
             ),
           ),
-          buildContainer()
+          Expanded(child: buildContainer()),
         ],
       ),
     );
@@ -71,8 +71,21 @@ class _CalendarState extends State<Calendar> {
       _listCathe.add(
         Expanded(
           child: Container(
-            height: 100,
-            child: Text('${i + 1}'),
+            // height: 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 20,
+                  height: 20,
+                  child: Text('${i + 1}'),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
             decoration: BoxDecoration(
                 border: Border.all(width: 0.1, color: Colors.greenAccent)),
           ),
@@ -87,7 +100,9 @@ class _CalendarState extends State<Calendar> {
         if (i == monthLastNumbar - 1) {
           for (int j = 0; j < repeatNumber; j++) {
             _listCathe.add(Expanded(
-              child: Container(),
+              child: Container(
+                color: Colors.cyanAccent.withOpacity(0.1),
+              ),
             ));
           }
         } else if (i < 7) {
@@ -95,14 +110,18 @@ class _CalendarState extends State<Calendar> {
             _listCathe.insert(
                 0,
                 Expanded(
-                  child: Container(),
+                  child: Container(
+                    color: Colors.cyanAccent.withOpacity(0.1),
+                  ),
                 ));
           }
         }
 
         _list.add(
-          Row(
-            children: _listCathe,
+          Expanded(
+            child: Row(
+              children: _listCathe,
+            ),
           ),
         );
         _listCathe = [];
